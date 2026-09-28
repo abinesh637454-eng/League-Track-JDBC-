@@ -9,6 +9,13 @@ import Project.LeagueTrack.service.FixtureService;
 import Project.LeagueTrack.service.MatchService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 
 import java.util.List;
@@ -20,6 +27,8 @@ import java.util.List;
         description = "APIs for generating and viewing tournament fixtures"
 )
 public class FixtureController {
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private final FixtureService fixtureService;
     private final MatchService matchService;
@@ -48,6 +57,26 @@ public class FixtureController {
                         .toList();
 
         return ResponseEntity.ok(responses);
+    }
+    @DeleteMapping("/clear")
+    @Transactional
+    public ResponseEntity<Map<String, Object>> clearFixtures() {
+
+        int deletedMatches =
+                entityManager
+                        .createQuery("delete from Match")
+                        .executeUpdate();
+
+        entityManager.clear();
+
+        return ResponseEntity.ok(
+                Map.of(
+                        "message",
+                        "Fixture cleared successfully",
+                        "deletedMatches",
+                        deletedMatches
+                )
+        );
     }
     @GetMapping
     @Operation(

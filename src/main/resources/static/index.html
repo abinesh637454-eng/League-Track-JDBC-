@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>LeagueTrack</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link
+            href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+            rel="stylesheet"
+    >
+
+    <link
+            rel="stylesheet"
+            href="/css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+        id="toastContainer"
+        class="toast-container"
+></div>
+
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<section
+        id="loginPage"
+        class="login-page"
+>
+
+    <div class="login-decoration decoration-one"></div>
+
+    <div class="login-decoration decoration-two"></div>
+
+
+    <div class="login-card">
+
+        <div class="login-brand">
+
+            <div class="brand-mark large">
+                LT
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    LeagueTrack
+                </div>
+
+                <div class="brand-subtitle">
+                    Tournament Management System
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="login-heading">
+
+            <p class="eyebrow">
+                TOURNAMENT CONTROL
+            </p>
+
+            <h1>
+                Manage your league.
+            </h1>
+
+            <p>
+                Register teams, generate fixtures,
+                record match results and monitor
+                standings from one centralized workspace.
+            </p>
+
+        </div>
+
+
+        <form
+                id="loginForm"
+                class="login-form"
+        >
+
+            <div class="input-group">
+
+                <label for="loginUsername">
+                    Username
+                </label>
+
+                <input
+                        id="loginUsername"
+                        type="text"
+                        placeholder="Enter username"
+                        autocomplete="username"
+                        required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="loginPassword">
+                    Password
+                </label>
+
+                <input
+                        id="loginPassword"
+                        type="password"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                >
+
+            </div>
+
+
+            <button
+                    type="submit"
+                    class="primary-btn wide-btn"
+            >
+
+                Sign In
+
+                <span>
+                    →
+                </span>
+
+            </button>
+
+
+            <div class="login-demo">
+
+                <span>
+                    Demo access
+                </span>
+
+                <strong>
+                    admin / leaguetrack
+                </strong>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     APPLICATION
+===================================================== -->
+
+<div
+        id="appShell"
+        class="app-shell hidden"
+>
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================= -->
+
+    <aside
+            id="sidebar"
+            class="sidebar"
+    >
+
+        <div class="sidebar-header">
+
+            <div class="brand-mark">
+                LT
+            </div>
+
+            <div class="brand-copy">
+
+                <div class="brand-name">
+                    LeagueTrack
+                </div>
+
+                <div class="brand-subtitle">
+                    Tournament Control
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+
+            <div class="nav-label">
+                COMMAND CENTER
+            </div>
+
+
+            <button
+                    class="nav-item active"
+                    data-page="dashboardPage"
+            >
+
+                <span class="nav-icon">
+                    ◈
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </button>
+
+
+            <button
+                    class="nav-item"
+                    data-page="teamsPage"
+            >
+
+                <span class="nav-icon">
+                    ♟
+                </span>
+
+                <span>
+                    Teams
+                </span>
+
+            </button>
+
+
+            <button
+                    class="nav-item"
+                    data-page="fixturesPage"
+            >
+
+                <span class="nav-icon">
+                    ◫
+                </span>
+
+                <span>
+                    Fixtures
+                </span>
+
+            </button>
+
+
+            <button
+                    class="nav-item"
+                    data-page="matchesPage"
+            >
+
+                <span class="nav-icon">
+                    ◎
+                </span>
+
+                <span>
+                    Matches
+                </span>
+
+            </button>
+
+
+            <button
+                    class="nav-item"
+                    data-page="standingsPage"
+            >
+
+                <span class="nav-icon">
+                    ▤
+                </span>
+
+                <span>
+                    Standings
+                </span>
+
+            </button>
+
+
+            <div class="nav-label nav-label-second">
+                SYSTEM
+            </div>
+
+
+            <button
+                    class="nav-item"
+                    data-page="aboutPage"
+            >
+
+                <span class="nav-icon">
+                    ⓘ
+                </span>
+
+                <span>
+                    About
+                </span>
+
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="admin-profile">
+
+                <div class="avatar">
+                    A
+                </div>
+
+                <div>
+
+                    <strong>
+                        Administrator
+                    </strong>
+
+                    <span>
+                        League Manager
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                    id="logoutButton"
+                    class="logout-btn"
+            >
+
+                <span>
+                    ↪
+                </span>
+
+                Logout
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =================================================
+         MAIN
+    ================================================= -->
+
+    <main class="main-content">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                        id="mobileMenuButton"
+                        class="mobile-menu-button"
+                >
+                    ☰
+                </button>
+
+
+                <div>
+
+                    <p class="topbar-eyebrow">
+                        LEAGUE MANAGEMENT
+                    </p>
+
+                    <h2 id="pageTitle">
+                        Dashboard
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <div class="live-indicator">
+
+                    <span class="live-dot"></span>
+
+                    LIVE
+
+                </div>
+
+
+                <button
+                        id="refreshButton"
+                        class="secondary-btn"
+                >
+
+                    ↻ Refresh
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             DASHBOARD
+        ================================================= -->
+
+        <section
+                id="dashboardPage"
+                class="page-section active-page"
+        >
+
+
+            <div class="hero-panel">
+
+                <div class="hero-content">
+
+                    <p class="eyebrow">
+                        TOURNAMENT OVERVIEW
+                    </p>
+
+                    <h1>
+                        Your league,
+                        <span>
+                            under control.
+                        </span>
+                    </h1>
+
+                    <p>
+                        Manage participating teams,
+                        tournament schedules, match
+                        results and league standings
+                        from one unified dashboard.
+                    </p>
+
+                </div>
+
+
+                <div class="hero-emblem">
+
+                    <span>
+                        LT
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+
+                <article class="stat-card">
+
+                    <div class="stat-label">
+                        TOTAL TEAMS
+                    </div>
+
+                    <div
+                            id="totalTeamsStat"
+                            class="stat-value"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-foot">
+                        Registered teams
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-label">
+                        TOTAL MATCHES
+                    </div>
+
+                    <div
+                            id="totalMatchesStat"
+                            class="stat-value"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-foot">
+                        Generated matches
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card accent-stat">
+
+                    <div class="stat-label">
+                        COMPLETED
+                    </div>
+
+                    <div
+                            id="completedMatchesStat"
+                            class="stat-value"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-foot">
+                        Results recorded
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-label">
+                        ROUNDS
+                    </div>
+
+                    <div
+                            id="totalRoundsStat"
+                            class="stat-value"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-foot">
+                        Fixture rounds
+                    </div>
+
+                </article>
+
+            </div>
+
+
+            <div class="dashboard-grid">
+
+
+                <div class="panel-card">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                LATEST RESULTS
+                            </p>
+
+                            <h3>
+                                Recent Matches
+                            </h3>
+
+                        </div>
+
+
+                        <button
+                                class="text-btn"
+                                data-page-target="matchesPage"
+                        >
+                            View all →
+                        </button>
+
+                    </div>
+
+
+                    <div class="table-wrap">
+
+                        <table class="data-table dashboard-table">
+
+                            <thead>
+
+                            <tr>
+
+                                <th>
+                                    Match
+                                </th>
+
+                                <th>
+                                    Score
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                    id="dashboardRecentMatches"
+                            ></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel-card">
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                CURRENT LEAGUE
+                            </p>
+
+                            <h3>
+                                Standings Snapshot
+                            </h3>
+
+                        </div>
+
+
+                        <button
+                                class="text-btn"
+                                data-page-target="standingsPage"
+                        >
+                            Full table →
+                        </button>
+
+                    </div>
+
+
+                    <div class="table-wrap">
+
+                        <table class="data-table dashboard-standing-table">
+
+                            <thead>
+
+                            <tr>
+
+                                <th>
+                                    #
+                                </th>
+
+                                <th>
+                                    Team
+                                </th>
+
+                                <th>
+                                    Pts
+                                </th>
+
+                            </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                    id="dashboardStandings"
+                            ></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             TEAMS
+        ================================================= -->
+
+        <section
+                id="teamsPage"
+                class="page-section"
+        >
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="eyebrow">
+                        TEAM MANAGEMENT
+                    </p>
+
+                    <h1>
+                        Teams
+                    </h1>
+
+                    <p>
+                        Register, edit and manage
+                        participating teams.
+                    </p>
+
+                </div>
+
+
+                <button
+                        id="registerTeamButton"
+                        class="primary-btn"
+                >
+
+                    + Register Team
+
+                </button>
+
+            </div>
+
+
+            <div
+                    id="teamFixtureNotice"
+                    class="fixture-info-banner hidden"
+            >
+
+                <div class="banner-icon">
+                    !
+                </div>
+
+                <div>
+
+                    <strong>
+                        Fixture rebuild required
+                    </strong>
+
+                    <p>
+                        A new team has been registered
+                        after the existing fixture was generated.
+                        Rebuild the fixture to include the new team.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel-card">
+
+                <div class="panel-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            REGISTERED TEAMS
+                        </p>
+
+                        <h3>
+                            Team Directory
+                        </h3>
+
+                    </div>
+
+
+                    <span
+                            id="teamCountLabel"
+                            class="count-badge"
+                    >
+                        0 teams
+                    </span>
+
+                </div>
+
+
+                <div class="table-wrap">
+
+                    <table class="data-table teams-table">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Team Name
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody
+                                id="teamsTableBody"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FIXTURES
+        ================================================= -->
+
+        <section
+                id="fixturesPage"
+                class="page-section"
+        >
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="eyebrow">
+                        SCHEDULE ENGINE
+                    </p>
+
+                    <h1>
+                        Fixtures
+                    </h1>
+
+                    <p>
+                        Generate, clear and rebuild
+                        your round-robin tournament schedule.
+                    </p>
+
+                </div>
+
+
+                <div class="section-actions">
+
+
+                    <button
+                            id="clearFixtureButton"
+                            class="secondary-btn danger-outline"
+                    >
+
+                        × Clear Fixture
+
+                    </button>
+
+
+                    <button
+                            id="rebuildFixtureButton"
+                            class="secondary-btn"
+                    >
+
+                        ↻ Rebuild Fixture
+
+                    </button>
+
+
+                    <button
+                            id="generateFixtureButton"
+                            class="primary-btn"
+                    >
+
+                        Generate Fixture
+
+                        <span>
+                            →
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="fixture-info-banner">
+
+                <div class="banner-icon">
+                    !
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Fixture workflow
+                    </strong>
+
+                    <p>
+                        Register all teams first. If you
+                        add another team after a fixture is
+                        generated, use Rebuild Fixture.
+                        This clears the previous schedule
+                        and generates a new one from the
+                        current teams.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                    id="fixtureStatusBanner"
+                    class="fixture-status-banner"
+            ></div>
+
+
+            <div
+                    id="fixturesContainer"
+                    class="fixtures-container"
+            ></div>
+
+        </section>
+
+
+        <!-- =================================================
+             MATCHES
+        ================================================= -->
+
+        <section
+                id="matchesPage"
+                class="page-section"
+        >
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="eyebrow">
+                        MATCH CONTROL
+                    </p>
+
+                    <h1>
+                        Matches
+                    </h1>
+
+                    <p>
+                        Manage pending matches and record
+                        detailed point-by-point results.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-bar">
+
+                <button
+                        class="filter-btn active"
+                        data-match-filter="all"
+                >
+                    All
+                </button>
+
+
+                <button
+                        class="filter-btn"
+                        data-match-filter="pending"
+                >
+                    Pending
+                </button>
+
+
+                <button
+                        class="filter-btn"
+                        data-match-filter="completed"
+                >
+                    Completed
+                </button>
+
+            </div>
+
+
+            <div class="panel-card">
+
+                <div class="table-wrap">
+
+                    <table class="data-table matches-table">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Round
+                            </th>
+
+                            <th>
+                                Home Team
+                            </th>
+
+                            <th>
+                                Score
+                            </th>
+
+                            <th>
+                                Away Team
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody
+                                id="matchesTableBody"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             STANDINGS
+        ================================================= -->
+
+        <section
+                id="standingsPage"
+                class="page-section"
+        >
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="eyebrow">
+                        LEAGUE TABLE
+                    </p>
+
+                    <h1>
+                        Standings
+                    </h1>
+
+                    <p>
+                        Current tournament points
+                        and match statistics.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel-card">
+
+                <div class="table-wrap">
+
+                    <table class="data-table standings-table">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>
+                                #
+                            </th>
+
+                            <th>
+                                Team
+                            </th>
+
+                            <th>
+                                Played
+                            </th>
+
+                            <th>
+                                Won
+                            </th>
+
+                            <th>
+                                Drawn
+                            </th>
+
+                            <th>
+                                Lost
+                            </th>
+
+                            <th>
+                                Points
+                            </th>
+
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody
+                                id="standingsTableBody"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ABOUT
+        ================================================= -->
+
+        <section
+                id="aboutPage"
+                class="page-section"
+        >
+
+            <div class="about-page">
+
+
+                <!-- ABOUT HERO -->
+
+                <div class="about-hero">
+
+                    <div class="about-badge">
+                        LEAGUE MANAGEMENT PLATFORM
+                    </div>
+
+
+                    <h1>
+                        LeagueTrack
+                    </h1>
+
+
+                    <p>
+                        LeagueTrack is a web-based tournament management
+                        system designed to simplify the organization,
+                        scheduling, result recording and monitoring of
+                        league competitions through one centralized platform.
+                    </p>
+
+                </div>
+
+
+                <!-- ABOUT CARDS -->
+
+                <div class="about-grid">
+
+
+                    <div class="about-card">
+
+                        <div class="about-card-icon">
+                            ⚽
+                        </div>
+
+                        <h3>
+                            What is LeagueTrack?
+                        </h3>
+
+                        <p>
+                            LeagueTrack brings the major activities involved
+                            in tournament administration into a single
+                            application. Organizers can register participating
+                            teams, generate fixtures, manage matches, record
+                            results and monitor standings without maintaining
+                            separate manual records.
+                        </p>
+
+                    </div>
+
+
+                    <div class="about-card">
+
+                        <div class="about-card-icon">
+                            👥
+                        </div>
+
+                        <h3>
+                            Team Management
+                        </h3>
+
+                        <p>
+                            The Teams module allows organizers to register
+                            new teams, update team information and manage
+                            participating teams. Team records are stored in
+                            the MySQL database and are used when generating
+                            tournament fixtures.
+                        </p>
+
+                    </div>
+
+
+                    <div class="about-card">
+
+                        <div class="about-card-icon">
+                            📅
+                        </div>
+
+                        <h3>
+                            Fixture Management
+                        </h3>
+
+                        <p>
+                            LeagueTrack generates a round-robin fixture using
+                            the currently registered teams. When the team list
+                            changes, the existing fixture can be cleared and
+                            rebuilt so that the updated tournament schedule
+                            includes all participating teams.
+                        </p>
+
+                    </div>
+
+
+                    <div class="about-card">
+
+                        <div class="about-card-icon">
+                            🏆
+                        </div>
+
+                        <h3>
+                            Match Result Management
+                        </h3>
+
+                        <p>
+                            Match results can be entered in a structured
+                            round-by-round format. Each round supports
+                            point-by-point entry, allowing the organizer to
+                            record which team won each point. The application
+                            calculates the final score and sends the result
+                            to the Spring Boot backend.
+                        </p>
+
+                    </div>
+
+
+                    <div class="about-card">
+
+                        <div class="about-card-icon">
+                            📊
+                        </div>
+
+                        <h3>
+                            Standings
+                        </h3>
+
+                        <p>
+                            The Standings module presents the current league
+                            position of every team. It tracks matches played,
+                            wins, draws, losses and points, making tournament
+                            progress easy to understand at a glance.
+                        </p>
+
+                    </div>
+
+
+                    <div class="about-card">
+
+                        <div class="about-card-icon">
+                            🔄
+                        </div>
+
+                        <h3>
+                            Complete Tournament Workflow
+                        </h3>
+
+                        <p>
+                            The application follows a simple workflow from
+                            tournament setup to competition monitoring:
+                            register teams, generate or rebuild fixtures,
+                            conduct matches, record results and monitor the
+                            updated standings.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- TECHNOLOGY STACK -->
+
+                <div class="about-section">
+
+                    <h2>
+                        Technology Stack
+                    </h2>
+
+
+                    <div class="technology-grid">
+
+
+                        <div class="technology-item">
+
+                            <strong>
+                                Frontend
+                            </strong>
+
+                            <span>
+                                HTML, CSS, JavaScript
+                            </span>
+
+                        </div>
+
+
+                        <div class="technology-item">
+
+                            <strong>
+                                Backend
+                            </strong>
+
+                            <span>
+                                Java, Spring Boot
+                            </span>
+
+                        </div>
+
+
+                        <div class="technology-item">
+
+                            <strong>
+                                Database
+                            </strong>
+
+                            <span>
+                                MySQL
+                            </span>
+
+                        </div>
+
+
+                        <div class="technology-item">
+
+                            <strong>
+                                Communication
+                            </strong>
+
+                            <span>
+                                REST APIs
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- SYSTEM WORKFLOW -->
+
+                <div class="about-section">
+
+                    <h2>
+                        System Workflow
+                    </h2>
+
+
+                    <div class="workflow-line">
+
+                        <span>
+                            Teams
+                        </span>
+
+                        <span>
+                            →
+                        </span>
+
+                        <span>
+                            Fixtures
+                        </span>
+
+                        <span>
+                            →
+                        </span>
+
+                        <span>
+                            Matches
+                        </span>
+
+                        <span>
+                            →
+                        </span>
+
+                        <span>
+                            Results
+                        </span>
+
+                        <span>
+                            →
+                        </span>
+
+                        <span>
+                            Standings
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROJECT PURPOSE -->
+
+                <div class="about-section">
+
+                    <h2>
+                        Project Purpose
+                    </h2>
+
+                    <p>
+                        The purpose of LeagueTrack is to reduce the manual
+                        effort involved in tournament administration and
+                        provide a consistent digital workflow for managing
+                        league competitions. By connecting the web interface
+                        with a Java Spring Boot backend and MySQL database,
+                        the system provides a practical full-stack solution
+                        for organizing and monitoring tournaments.
+                    </p>
+
+                </div>
+
+
+                <!-- KEY BENEFITS -->
+
+                <div class="about-section">
+
+                    <h2>
+                        Key Benefits
+                    </h2>
+
+
+                    <div class="about-benefits">
+
+
+                        <div>
+
+                            <strong>
+                                Centralized Management
+                            </strong>
+
+                            <span>
+                                Teams, fixtures, matches and standings are
+                                managed in one place.
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Reduced Manual Work
+                            </strong>
+
+                            <span>
+                                Fixture generation and standings calculations
+                                reduce repetitive administrative work.
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Clear Match Tracking
+                            </strong>
+
+                            <span>
+                                Match status and recorded scores can be
+                                monitored easily.
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Expandable Architecture
+                            </strong>
+
+                            <span>
+                                The application can be extended with additional
+                                tournament features in the future.
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     TEAM MODAL
+===================================================== -->
+
+<div
+        id="teamModal"
+        class="modal-overlay hidden"
+>
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    TEAM MANAGEMENT
+                </p>
+
+                <h2 id="teamModalTitle">
+                    Register Team
+                </h2>
+
+            </div>
+
+
+            <button
+                    class="modal-close"
+                    data-close-modal="teamModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="teamForm">
+
+            <input
+                    type="hidden"
+                    id="teamId"
+            >
+
+
+            <div class="input-group">
+
+                <label for="teamName">
+                    Team Name
+                </label>
+
+                <input
+                        id="teamName"
+                        type="text"
+                        placeholder="e.g. CSE Titans"
+                        maxlength="100"
+                        required
+                >
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                        type="button"
+                        class="secondary-btn"
+                        data-close-modal="teamModal"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                        type="submit"
+                        class="primary-btn"
+                >
+                    Save Team
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     RESULT MODAL
+===================================================== -->
+
+<div
+        id="resultModal"
+        class="modal-overlay hidden"
+>
+
+    <div class="modal-card result-modal-card">
+
+
+        <div class="modal-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    MATCH RESULT
+                </p>
+
+                <h2>
+                    Record Round Results
+                </h2>
+
+            </div>
+
+
+            <button
+                    class="modal-close"
+                    data-close-modal="resultModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- MATCH HEADER -->
+
+        <div class="match-vs-card">
+
+
+            <div class="match-team-side">
+
+                <span class="match-team-label">
+                    HOME
+                </span>
+
+                <strong id="resultHomeTeam">
+                    Team A
+                </strong>
+
+            </div>
+
+
+            <div class="match-score-preview">
+
+                <strong id="resultHomeScore">
+                    0
+                </strong>
+
+                <span>
+                    :
+                </span>
+
+                <strong id="resultAwayScore">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="match-team-side away-side">
+
+                <span class="match-team-label">
+                    AWAY
+                </span>
+
+                <strong id="resultAwayTeam">
+                    Team B
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- SCORE CONFIGURATION -->
+
+        <div class="result-controls">
+
+
+            <div class="result-control">
+
+                <label for="roundCount">
+                    Number of Rounds
+                </label>
+
+                <select id="roundCount">
+
+                    <option value="1">
+                        1 Round
+                    </option>
+
+                    <option value="2">
+                        2 Rounds
+                    </option>
+
+                    <option
+                            value="3"
+                            selected
+                    >
+                        3 Rounds
+                    </option>
+
+                    <option value="4">
+                        4 Rounds
+                    </option>
+
+                    <option value="5">
+                        5 Rounds
+                    </option>
+
+                    <option value="6">
+                        6 Rounds
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="result-control">
+
+                <label for="pointsPerRound">
+                    Points / Round
+                </label>
+
+                <select id="pointsPerRound">
+
+                    <option value="1">
+                        1 Point
+                    </option>
+
+                    <option value="3">
+                        3 Points
+                    </option>
+
+                    <option
+                            value="5"
+                            selected
+                    >
+                        5 Points
+                    </option>
+
+                    <option value="7">
+                        7 Points
+                    </option>
+
+                    <option value="9">
+                        9 Points
+                    </option>
+
+                    <option value="11">
+                        11 Points
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- INSTRUCTION -->
+
+        <div class="point-instruction">
+
+            <strong>
+                Point-by-point scoring
+            </strong>
+
+            <span>
+                Select the team that won each point.
+            </span>
+
+        </div>
+
+
+        <!-- ROUND EDITOR -->
+
+        <div
+                id="roundsEditor"
+                class="rounds-editor"
+        ></div>
+
+
+        <!-- FINAL SCORE -->
+
+        <div class="final-score-card">
+
+            <div>
+
+                <span>
+                    FINAL SCORE
+                </span>
+
+                <strong id="finalScoreText">
+                    0 : 0
+                </strong>
+
+            </div>
+
+
+            <div
+                    id="resultValidationMessage"
+                    class="validation-message"
+            ></div>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="modal-actions">
+
+            <button
+                    type="button"
+                    class="secondary-btn"
+                    data-close-modal="resultModal"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                    id="saveResultButton"
+                    type="button"
+                    class="primary-btn"
+            >
+                Record Match Result
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="/js/app.js"></script>
+
+</body>
+
+</html>
