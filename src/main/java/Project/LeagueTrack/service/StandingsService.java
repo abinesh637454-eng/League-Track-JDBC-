@@ -6,6 +6,7 @@ import Project.LeagueTrack.repository.StandingsEntryRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import Project.LeagueTrack.dto.StandingsResponse;
 
 import java.util.Comparator;
 import java.util.List;
@@ -72,7 +73,8 @@ public class StandingsService {
         standingsEntryRepository.save(awayTeam);
     }
 
-    public List<StandingsEntry> getAllStandings() {
+    @Transactional(readOnly = true)
+    public List<StandingsResponse> getAllStandings() {
 
         return standingsEntryRepository.findAll()
                 .stream()
@@ -81,6 +83,15 @@ public class StandingsService {
                                 StandingsEntry::getPoints
                         ).reversed()
                 )
+                .map(entry -> new StandingsResponse(
+                        entry.getTeam().getId(),
+                        entry.getTeam().getName(),
+                        entry.getPlayed(),
+                        entry.getWon(),
+                        entry.getDrawn(),
+                        entry.getLost(),
+                        entry.getPoints()
+                ))
                 .toList();
     }
 

@@ -1,16 +1,22 @@
 package Project.LeagueTrack.controller;
 
-import Project.LeagueTrack.entity.StandingsEntry;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import Project.LeagueTrack.service.StandingsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import Project.LeagueTrack.dto.StandingsResponse;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/standings")
+@Tag(
+        name = "Standings",
+        description = "APIs for viewing tournament standings and team points"
+)
 public class StandingsController {
 
     private final StandingsService standingsService;
@@ -20,9 +26,13 @@ public class StandingsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StandingsEntry>> getStandings() {
+    @Operation(
+            summary = "Get tournament standings",
+            description = "Returns the current tournament standings with matches played, wins, draws, losses, and points."
+    )
+    public ResponseEntity<List<StandingsResponse>> getStandings() {
 
-        List<StandingsEntry> standings =
+        List<StandingsResponse> standings =
                 standingsService.getAllStandings();
 
         return ResponseEntity.ok(standings);

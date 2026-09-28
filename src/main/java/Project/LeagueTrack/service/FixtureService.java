@@ -1,5 +1,9 @@
 package Project.LeagueTrack.service;
 
+import Project.LeagueTrack.exception.InsufficientTeamsException;
+import Project.LeagueTrack.exception.FixtureAlreadyGeneratedException;
+import Project.LeagueTrack.dto.FixtureResponse;
+import Project.LeagueTrack.dto.MatchResponse;
 import Project.LeagueTrack.entity.Fixture;
 import Project.LeagueTrack.entity.Match;
 import Project.LeagueTrack.entity.Team;
@@ -34,15 +38,15 @@ public class FixtureService {
 
         List<Team> teams = new ArrayList<>(teamRepository.findAll());
 
-        if (teams.size() < 2) {
-            throw new IllegalStateException(
-                    "At least 2 teams are required to generate a fixture"
+        if (matchRepository.count() > 0) {
+            throw new FixtureAlreadyGeneratedException(
+                    "Fixture has already been generated"
             );
         }
 
-        if (matchRepository.count() > 0) {
-            throw new IllegalStateException(
-                    "Fixture has already been generated"
+        if (teams.size() < 2) {
+            throw new InsufficientTeamsException(
+                    "At least 2 teams are required to generate a fixture"
             );
         }
 
@@ -60,6 +64,8 @@ public class FixtureService {
             Fixture fixture = new Fixture(roundNumber);
             Fixture savedFixture = fixtureRepository.save(fixture);
 
+            List<Match> roundMatches = new ArrayList<>();
+
             for (int i = 0; i < matchesPerRound; i++) {
 
                 Team team1 = teams.get(i);
@@ -75,15 +81,11 @@ public class FixtureService {
                         team2
                 );
 
-                generatedMatches.add(match);
+                roundMatches.add(match);
             }
 
-            matchRepository.saveAll(
-                    generatedMatches.subList(
-                            generatedMatches.size() - matchesPerRound,
-                            generatedMatches.size()
-                    )
-            );
+            matchRepository.saveAll(roundMatches);
+            generatedMatches.addAll(roundMatches);
 
             Team lastTeam = teams.remove(teams.size() - 1);
             teams.add(1, lastTeam);
@@ -91,7 +93,41 @@ public class FixtureService {
 
         return generatedMatches;
     }
-    public List<Fixture> getAllFixtures() {
-        return fixtureRepository.findAll();
+
+    @Transactional(readOnly = true)
+    public List<FixtureResponse> getAllFixtures() {
+
+        return fixtureRepository.findAll()
+                .stream()
+                .map(fixture -> {
+
+                    List<MatchResponse> matches =
+                            matchRepository.findByFixtureId(fixture.getId())
+                                    .stream()
+                                    .map(match -> new MatchResponse(
+                                            match.getId(),
+                                            fixture.getId(),
+                                            fixture.getRoundNumber(),
+
+                                            match.getHomeTeam().getId(),
+                                            match.getHomeTeam().getName(),
+
+                                            match.getAwayTeam().getId(),
+                                            match.getAwayTeam().getName(),
+
+                                            match.getHomeScore(),
+                                            match.getAwayScore(),
+
+                                            match.isResultRecorded()
+                                    ))
+                                    .toList();
+
+                    return new FixtureResponse(
+                            fixture.getId(),
+                            fixture.getRoundNumber(),
+                            matches
+                    );
+                })
+                .toList();
     }
 }

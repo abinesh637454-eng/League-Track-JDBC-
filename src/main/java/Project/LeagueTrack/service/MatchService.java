@@ -7,6 +7,7 @@ import Project.LeagueTrack.exception.ResourceNotFoundException;
 import Project.LeagueTrack.repository.MatchRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import Project.LeagueTrack.dto.MatchResponse;
 
 @Service
 public class MatchService {
@@ -21,9 +22,8 @@ public class MatchService {
         this.matchRepository = matchRepository;
         this.standingsService = standingsService;
     }
-
     @Transactional
-    public Match recordResult(
+    public MatchResponse recordResult(
             Long matchId,
             MatchResultRequest request) {
 
@@ -73,16 +73,49 @@ public class MatchService {
 
         match.setResultRecorded(true);
 
-        return matchRepository.save(match);
+        Match savedMatch = matchRepository.save(match);
+
+        return toResponse(savedMatch);
     }
 
-    public Match getMatchById(Long matchId) {
+    @Transactional(readOnly = true)
+    public MatchResponse getMatchById(Long matchId) {
 
-        return matchRepository.findById(matchId)
+        Match match = matchRepository.findById(matchId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Match not found with ID: " + matchId
                         )
                 );
+
+        return toResponse(match);
+    }
+    @Transactional(readOnly = true)
+    public java.util.List<MatchResponse> getAllMatches() {
+
+        return matchRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+    @Transactional(readOnly = true)
+    public MatchResponse toResponse(Match match) {
+
+        return new MatchResponse(
+                match.getId(),
+                match.getFixture().getId(),
+                match.getFixture().getRoundNumber(),
+
+                match.getHomeTeam().getId(),
+                match.getHomeTeam().getName(),
+
+                match.getAwayTeam().getId(),
+                match.getAwayTeam().getName(),
+
+                match.getHomeScore(),
+                match.getAwayScore(),
+
+                match.isResultRecorded()
+        );
     }
 }

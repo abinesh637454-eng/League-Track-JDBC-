@@ -1,5 +1,6 @@
 package Project.LeagueTrack.entity;
 
+import jakarta.persistence.Version;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +35,8 @@ public class Match {
     private Integer awayScore;
 
     private boolean resultRecorded = false;
+    @Version
+    private Long version;
 
     public Match() {
     }
