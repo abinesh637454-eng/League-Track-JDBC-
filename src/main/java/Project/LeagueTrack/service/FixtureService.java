@@ -91,4 +91,7 @@ public class FixtureService {
 
         return generatedMatches;
     }
+    public List<Fixture> getAllFixtures() {
+        return fixtureRepository.findAll();
+    }
 }

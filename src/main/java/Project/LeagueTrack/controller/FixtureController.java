@@ -1,9 +1,11 @@
 package Project.LeagueTrack.controller;
 
+import Project.LeagueTrack.entity.Fixture;
 import Project.LeagueTrack.entity.Match;
 import Project.LeagueTrack.service.FixtureService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -23,5 +25,12 @@ public class FixtureController {
         List<Match> matches = fixtureService.generateRoundRobinFixture();
 
         return ResponseEntity.ok(matches);
+    }
+    @GetMapping
+    public ResponseEntity<List<Fixture>> getAllFixtures() {
+
+        List<Fixture> fixtures = fixtureService.getAllFixtures();
+
+        return ResponseEntity.ok(fixtures);
     }
 }
