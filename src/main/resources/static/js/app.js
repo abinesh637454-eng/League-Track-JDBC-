@@ -149,6 +149,18 @@ document.addEventListener(
     "DOMContentLoaded",
     () => {
 
+        /*
+         * Keep HTML input limit synchronized
+         * with JavaScript validation.
+         */
+
+        if (teamNameInput) {
+
+            teamNameInput.maxLength = 25;
+
+        }
+
+
         setupNavigation();
 
         setupButtons();
@@ -676,7 +688,7 @@ function renderTeams() {
 
                     /*
                      * REAL DATABASE ID
-                     * Used only internally for Edit/Delete.
+                     * Used internally for Edit/Delete.
                      */
 
                     const id =
@@ -694,7 +706,7 @@ function renderTeams() {
                     /*
                      * DISPLAY NUMBER
                      * Starts from 1 regardless of
-                     * the MySQL AUTO_INCREMENT value.
+                     * the actual database ID.
                      */
 
                     const displayNumber =
@@ -834,6 +846,18 @@ function openTeamModal(
         teamId || "";
 
 
+    /*
+     * Keep maximum length synchronized
+     * every time the modal is opened.
+     */
+
+    if (teamNameInput) {
+
+        teamNameInput.maxLength = 25;
+
+    }
+
+
     if (teamId) {
 
         const team =
@@ -890,6 +914,10 @@ function openTeamModal(
 }
 
 
+/* =========================================================
+   TEAM FORM
+========================================================= */
+
 teamForm.addEventListener(
     "submit",
     async (event) => {
@@ -897,7 +925,7 @@ teamForm.addEventListener(
         event.preventDefault();
 
 
-        const name =
+        const rawName =
             teamNameInput
                 .value
                 .trim();
@@ -909,12 +937,99 @@ teamForm.addEventListener(
                 .trim();
 
 
-        if (!name) {
+        /*
+         * SAME VALIDATION IS USED FOR:
+         *
+         * 1. Register Team
+         * 2. Edit Team
+         */
+
+        const validation =
+            validateTeamName(
+                rawName
+            );
+
+
+        if (!validation.valid) {
 
             showToast(
-                "Enter a team name.",
+                validation.message,
                 "error"
             );
+
+            teamNameInput.focus();
+
+            return;
+
+        }
+
+
+        /*
+         * Normalize spaces.
+         *
+         * Example:
+         * "  CSE     Titans  "
+         *
+         * becomes:
+         * "CSE Titans"
+         */
+
+        const name =
+            normalizeTeamName(
+                rawName
+            );
+
+
+        /*
+         * Frontend duplicate detection.
+         *
+         * During editing, the current team is
+         * excluded from the duplicate check.
+         */
+
+        const duplicate =
+            state.teams.find(
+                (team) => {
+
+                    const existingName =
+                        normalizeTeamName(
+                            team.name ??
+                            team.teamName ??
+                            ""
+                        );
+
+
+                    const sameName =
+                        existingName.toLowerCase() ===
+                        name.toLowerCase();
+
+
+                    const existingId =
+                        String(
+                            team.id ??
+                            team.teamId ??
+                            ""
+                        );
+
+
+                    return (
+                        sameName &&
+                        existingId !==
+                        String(id)
+                    );
+
+                }
+            );
+
+
+        if (duplicate) {
+
+            showToast(
+                "A team with this name already exists.",
+                "error"
+            );
+
+            teamNameInput.focus();
 
             return;
 
@@ -924,6 +1039,10 @@ teamForm.addEventListener(
         try {
 
             if (id) {
+
+                /*
+                 * EDIT TEAM
+                 */
 
                 await apiRequest(
                     `${API_ENDPOINTS.teams}/${encodeURIComponent(id)}`,
@@ -946,6 +1065,10 @@ teamForm.addEventListener(
                 );
 
             } else {
+
+                /*
+                 * REGISTER TEAM
+                 */
 
                 await apiRequest(
                     API_ENDPOINTS.teams,
@@ -999,6 +1122,519 @@ teamForm.addEventListener(
 
     }
 );
+
+
+/* =========================================================
+   TEAM NAME NORMALIZATION
+========================================================= */
+
+function normalizeTeamName(
+    value
+) {
+
+    return String(
+        value || ""
+    )
+        .trim()
+        .replace(
+            /\s+/g,
+            " "
+        );
+
+}
+
+
+/* =========================================================
+   TEAM NAME VALIDATION
+========================================================= */
+
+function validateTeamName(
+    value
+) {
+
+    const name =
+        normalizeTeamName(
+            value
+        );
+
+
+    /*
+     * 1. EMPTY NAME
+     */
+
+    if (!name) {
+
+        return {
+
+            valid:
+                false,
+
+            message:
+                "Team name cannot be empty."
+
+        };
+
+    }
+
+
+    /*
+     * 2. MINIMUM LENGTH
+     */
+
+    if (
+        name.length <
+        3
+    ) {
+
+        return {
+
+            valid:
+                false,
+
+            message:
+                "Team name must contain at least 3 characters."
+
+        };
+
+    }
+
+
+    /*
+     * 3. MAXIMUM LENGTH = 25
+     */
+
+    if (
+        name.length >
+        25
+    ) {
+
+        return {
+
+            valid:
+                false,
+
+            message:
+                "Team name cannot exceed 25 characters."
+
+        };
+
+    }
+
+
+    /*
+     * 4. MUST START WITH A LETTER
+     */
+
+    if (
+        !/^[A-Za-z]/.test(
+            name
+        )
+    ) {
+
+        return {
+
+            valid:
+                false,
+
+            message:
+                "Team name must start with a letter."
+
+        };
+
+    }
+
+
+    /*
+     * 5. ONLY ALLOWED CHARACTERS
+     *
+     * Allowed:
+     *
+     * A-Z
+     * a-z
+     * 0-9
+     * Space
+     * Hyphen
+     * Apostrophe
+     * Period
+     *
+     * Examples:
+     *
+     * CSE Titans
+     * CSE-2026
+     * St. Mary's
+     */
+
+    if (
+        !/^[A-Za-z][A-Za-z0-9]*(?:[ .'-][A-Za-z0-9]+)*$/.test(
+            name
+        )
+    ) {
+
+        return {
+
+            valid:
+                false,
+
+            message:
+                "Use letters, numbers, spaces, hyphens, apostrophes or periods only."
+
+        };
+
+    }
+
+
+    /*
+     * 6. EXTRACT LETTERS ONLY
+     */
+
+    const letters =
+        name
+            .replace(
+                /[^A-Za-z]/g,
+                ""
+            )
+            .toLowerCase();
+
+
+    /*
+     * 7. AT LEAST TWO DIFFERENT LETTERS
+     *
+     * Prevents:
+     *
+     * aaaaaaaa
+     * dddddddd
+     * xxxxxxxx
+     */
+
+    const uniqueLetters =
+        new Set(
+            letters
+        ).size;
+
+
+    if (
+        letters.length <
+        2 ||
+        uniqueLetters <
+        2
+    ) {
+
+        return {
+
+            valid:
+                false,
+
+            message:
+                "Please enter a meaningful team name."
+
+        };
+
+    }
+
+
+    /*
+     * 8. VOWEL CHECK
+     *
+     * Prevents obvious random combinations
+     * such as:
+     *
+     * dfghj
+     * xkjrt
+     * plmnb
+     *
+     * For names with 4 or more letters,
+     * at least one vowel is expected.
+     */
+
+    const vowelCount =
+        (
+            letters.match(
+                /[aeiou]/g
+            ) || []
+        ).length;
+
+
+    if (
+        letters.length >= 4 &&
+        vowelCount === 0
+    ) {
+
+        return {
+
+            valid:
+                false,
+
+            message:
+                "Please enter a meaningful team name."
+
+        };
+
+    }
+
+
+    /*
+     * 9. REJECT EXCESSIVE CHARACTER REPETITION
+     *
+     * Examples:
+     *
+     * ddddddddd
+     * aaaaaaaaa
+     * sssssssss
+     *
+     * If one character makes up more than
+     * 70% of the letters, treat it as
+     * obvious repeated input.
+     */
+
+    const frequency =
+        {};
+
+
+    for (
+        const letter
+        of letters
+        ) {
+
+        frequency[letter] =
+            (
+                frequency[letter] ||
+                0
+            ) + 1;
+
+    }
+
+
+    const highestFrequency =
+        Math.max(
+            ...Object.values(
+                frequency
+            )
+        );
+
+
+    if (
+        letters.length > 3 &&
+        (
+            highestFrequency /
+            letters.length
+        ) > 0.70
+    ) {
+
+        return {
+
+            valid:
+                false,
+
+            message:
+                "Please enter a meaningful team name instead of repeated characters."
+
+        };
+
+    }
+
+
+    /*
+     * 10. REJECT LONG CONSONANT SEQUENCES
+     *
+     * Examples:
+     *
+     * dfgh
+     * xkjr
+     * plmn
+     * qrst
+     *
+     * This specifically catches many
+     * random/gibberish inputs.
+     */
+
+    if (
+        /[bcdfghjklmnpqrstvwxyz]{4,}/i.test(
+            letters
+        )
+    ) {
+
+        return {
+
+            valid:
+                false,
+
+            message:
+                "Please enter a meaningful team name."
+
+        };
+
+    }
+
+
+    /*
+     * 11. REJECT COMMON KEYBOARD SEQUENCES
+     */
+
+    const keyboardPatterns = [
+
+        "qwerty",
+        "asdfgh",
+        "zxcvbn",
+        "qazwsx",
+        "wsxedc",
+        "edcrfv",
+        "rfvtgb",
+        "qwert",
+        "asdfg",
+        "zxcvb"
+
+    ];
+
+
+    if (
+        keyboardPatterns.some(
+            (pattern) =>
+                letters.includes(
+                    pattern
+                )
+        )
+    ) {
+
+        return {
+
+            valid:
+                false,
+
+            message:
+                "Please enter a real team name, not a keyboard sequence."
+
+        };
+
+    }
+
+
+    /*
+     * 12. REJECT OBVIOUS REPEATED BLOCKS
+     *
+     * Examples:
+     *
+     * abababab
+     * xyxyxyxy
+     * abcabcabc
+     */
+
+    const compactName =
+        name.replace(
+            /\s/g,
+            ""
+        );
+
+
+    if (
+        /^(.{1,3})\1{2,}$/i.test(
+            compactName
+        )
+    ) {
+
+        return {
+
+            valid:
+                false,
+
+            message:
+                "Please enter a meaningful team name."
+
+        };
+
+    }
+
+
+    /*
+     * 13. REJECT SIMPLE SEQUENTIAL LETTERS
+     *
+     * Examples:
+     *
+     * abcde
+     * bcdef
+     * xyzab
+     *
+     * This prevents another common form
+     * of random test input.
+     */
+
+    const sequence =
+        "abcdefghijklmnopqrstuvwxyz";
+
+
+    const reverseSequence =
+        "zyxwvutsrqponmlkjihgfedcba";
+
+
+    const compactLetters =
+        letters;
+
+
+    if (
+        compactLetters.length >= 5
+    ) {
+
+        for (
+            let index = 0;
+            index <=
+            sequence.length - 5;
+            index++
+        ) {
+
+            const forward =
+                sequence.slice(
+                    index,
+                    index + 5
+                );
+
+
+            const backward =
+                reverseSequence.slice(
+                    index,
+                    index + 5
+                );
+
+
+            if (
+                compactLetters.includes(
+                    forward
+                ) ||
+                compactLetters.includes(
+                    backward
+                )
+            ) {
+
+                return {
+
+                    valid:
+                        false,
+
+                    message:
+                        "Please enter a meaningful team name."
+
+                };
+
+            }
+
+        }
+
+    }
+
+
+    /*
+     * 14. VALID
+     */
+
+    return {
+
+        valid:
+            true,
+
+        message:
+            ""
+
+    };
+
+}
 
 
 /* =========================================================
@@ -1113,7 +1749,8 @@ async function loadFixtures() {
 async function generateFixtures() {
 
     if (
-        state.teams.length < 2
+        state.teams.length <
+        2
     ) {
 
         showToast(
@@ -1292,7 +1929,8 @@ async function clearFixtures() {
 async function rebuildFixtures() {
 
     if (
-        state.teams.length < 2
+        state.teams.length <
+        2
     ) {
 
         showToast(
@@ -1652,13 +2290,13 @@ function normalizeFixtureRounds(
             )
 
             /*
-             * IMPORTANT:
-             * Remove empty rounds completely.
+             * Remove empty rounds.
              */
 
             .filter(
                 (round) =>
-                    round.matches.length > 0
+                    round.matches.length >
+                    0
             );
 
     }
@@ -1683,7 +2321,9 @@ function normalizeFixtureRounds(
 
 
             if (
-                !groups.has(round)
+                !groups.has(
+                    round
+                )
             ) {
 
                 groups.set(
@@ -1728,13 +2368,13 @@ function normalizeFixtureRounds(
         )
 
         /*
-         * IMPORTANT:
-         * Remove any empty round group.
+         * Remove empty rounds.
          */
 
         .filter(
             (round) =>
-                round.matches.length > 0
+                round.matches.length >
+                0
         );
 
 }
@@ -1796,9 +2436,7 @@ function renderFixtures() {
 
 
     /*
-     * Only non-empty rounds reach this point.
-     * Therefore "No matches in this round"
-     * will never be rendered.
+     * Only non-empty rounds are rendered.
      */
 
     container.innerHTML =
@@ -1816,13 +2454,9 @@ function renderFixtures() {
                             : [];
 
 
-                    /*
-                     * Safety check:
-                     * Never render an empty round.
-                     */
-
                     if (
-                        matches.length === 0
+                        matches.length ===
+                        0
                     ) {
 
                         return "";
@@ -1872,7 +2506,8 @@ function renderFixtures() {
                         matches.length
                     }
                                             ${
-                        matches.length === 1
+                        matches.length ===
+                        1
                             ? "match"
                             : "matches"
                     }
@@ -2562,7 +3197,6 @@ function rebuildRoundEditor() {
                             class="round-editor-card"
                         >
 
-
                             <div
                                 class="round-editor-header"
                             >
@@ -2626,7 +3260,8 @@ function rebuildRoundEditor() {
                                                     <button
                                                         type="button"
                                                         class="point-choice ${
-                                    winner === "home"
+                                    winner ===
+                                    "home"
                                         ? "selected-home"
                                         : ""
                                 }"
@@ -2647,7 +3282,8 @@ function rebuildRoundEditor() {
                                                     <button
                                                         type="button"
                                                         class="point-choice ${
-                                    winner === "away"
+                                    winner ===
+                                    "away"
                                         ? "selected-away"
                                         : ""
                                 }"
@@ -3067,6 +3703,7 @@ function saveLocalRoundDetails(
         JSON.stringify(
             data
         )
+
     );
 
 }
@@ -3584,14 +4221,18 @@ function renderDashboardStandings() {
 
                             <td class="team-name-cell">
                                 ${escapeHtml(
-                        String(name)
+                        String(
+                            name
+                        )
                     )}
                             </td>
 
 
                             <td class="score-cell">
                                 ${escapeHtml(
-                        String(points)
+                        String(
+                            points
+                        )
                     )}
                             </td>
 
